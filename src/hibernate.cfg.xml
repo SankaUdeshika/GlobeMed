@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+      "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+      "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+ <session-factory>
+  <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+  <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/globemed?useSSL=false&amp;serverTimezone=UTC</property>
+  <property name="hibernate.connection.username">root</property>
+  <property name="hibernate.connection.password">12345678</property>
+
+  <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+  <property name="hibernate.show_sql">true</property>
+  <property name="hibernate.format_sql">true</property>
+  <!-- For development: auto create/update schema -->
+  <property name="hibernate.hbm2ddl.auto">update</property>
+
+  <!-- register annotated classes (or you can programmatically add them) -->
+  <mapping class="com.globemed.model.Patient"/>
+  <mapping class="com.globemed.model.Appointment"/>
+  <!-- add others -->
+ </session-factory>
+</hibernate-configuration>
