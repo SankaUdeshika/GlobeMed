@@ -1,59 +1,93 @@
 package com.jiat.globemed.model;
 
-import javax.persistence.*;
-import java.time.LocalDate;
+import jakarta.persistence.*;
+import java.util.*;
+
 
 @Entity
-@Table(name="patients")
+@Table(name = "patients")
 public class Patient {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String firstName;
-    private String lastName;
-    private LocalDate dob;
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    private Date dob;
+
+    @Column(length = 10, nullable = false)
     private String gender;
-    private String contactNumber;
+
+    @Column(length = 255)
+    private String address;
+
+    @Column(length = 15, unique = true)
+    private String phone;
+
+    @Column(length = 100, unique = true)
     private String email;
 
-    @Column(columnDefinition="TEXT")
-    private String medicalHistory;
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String medicalHistory; // Can be JSON or plain text
 
-    private String bloodGroup;
-    private String insuranceProvider;
-    private String insurancePolicyNumber;
+    // Relationship: One patient can have many treatment plans
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<TreatmentPlan> treatmentPlans = new ArrayList<>();
 
-    // constructors, getters setters omitted for brevity
+    // Constructors
+    public Patient() {}
 
-    private Patient() {}
-    public static Builder builder() { return new Builder(); }
+    public Patient(String name, Date dob, String gender, String address, String phone, String email, String medicalHistory) {
+        this.name = name;
+        this.dob = dob;
+        this.gender = gender;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.medicalHistory = medicalHistory;
+    }
 
-    public static class Builder {
-        private String firstName, lastName;
-        private LocalDate dob;
-        private String gender, contactNumber, email, medicalHistory;
-        private String bloodGroup, insuranceProvider, insurancePolicyNumber;
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-        public Builder firstName(String s){ this.firstName=s; return this; }
-        public Builder lastName(String s){ this.lastName=s; return this; }
-        public Builder dob(LocalDate d){ this.dob=d; return this; }
-        public Builder gender(String g){ this.gender=g; return this; }
-        public Builder contactNumber(String c){ this.contactNumber=c; return this; }
-        public Builder email(String e){ this.email=e; return this; }
-        public Builder medicalHistory(String m){ this.medicalHistory=m; return this; }
-        public Builder bloodGroup(String b){ this.bloodGroup=b; return this; }
-        public Builder insuranceProvider(String p){ this.insuranceProvider=p; return this; }
-        public Builder insurancePolicyNumber(String n){ this.insurancePolicyNumber=n; return this; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-        public Patient build(){
-            Patient p = new Patient();
-            p.firstName=this.firstName; p.lastName=this.lastName;
-            p.dob=this.dob; p.gender=this.gender; p.contactNumber=this.contactNumber;
-            p.email=this.email; p.medicalHistory=this.medicalHistory;
-            p.bloodGroup=this.bloodGroup; p.insuranceProvider=this.insuranceProvider;
-            p.insurancePolicyNumber=this.insurancePolicyNumber;
-            return p;
-        }
+    public Date getDob() { return dob; }
+    public void setDob(Date dob) { this.dob = dob; }
+
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
+
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getMedicalHistory() { return medicalHistory; }
+    public void setMedicalHistory(String medicalHistory) { this.medicalHistory = medicalHistory; }
+
+    public List<TreatmentPlan> getTreatmentPlans() { return treatmentPlans; }
+    public void setTreatmentPlans(List<TreatmentPlan> treatmentPlans) { this.treatmentPlans = treatmentPlans; }
+
+    // Utility methods
+    public void addTreatmentPlan(TreatmentPlan plan) {
+        treatmentPlans.add(plan);
+        plan.setPatient(this);
+    }
+
+    public void removeTreatmentPlan(TreatmentPlan plan) {
+        treatmentPlans.remove(plan);
+        plan.setPatient(null);
     }
 }
