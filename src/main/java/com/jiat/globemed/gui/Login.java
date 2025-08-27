@@ -5,19 +5,17 @@
 package com.jiat.globemed.gui;
 
 import com.jiat.globemed.model.*;
+import com.jiat.globemed.util.HibernateUtil;
 
 import java.text.SimpleDateFormat;
 
-import com.jiat.globemed.service.LoginHandler;
-import com.jiat.globemed.service.PasswordHandler;
-import com.jiat.globemed.service.RoleHandler;
-import com.jiat.globemed.service.UsernameHandler;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import javax.swing.*;
+import org.hibernate.query.Query;
 
 /**
  *
@@ -108,36 +106,35 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-
-
-
         String txtUsername = jTextField1.getText();
         String txtPassword = jPasswordField1.getText();
 
 
-        Staff staff = new Staff();
-        staff.setUsername(txtUsername);
-        String password = txtPassword;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "FROM Staff s WHERE s.username = :username AND s.password = :password";
+            Query<Staff> query = session.createQuery(hql, Staff.class);
+            query.setParameter("username", txtUsername);
+            query.setParameter("password", txtPassword);
 
-        // Setup Chain of Responsibility
-        LoginHandler usernameHandler = new UsernameHandler();
-        LoginHandler passwordHandler = new PasswordHandler();
-        LoginHandler roleHandler = new RoleHandler();
+            Staff staff = query.uniqueResult();
 
-        usernameHandler.setNext(passwordHandler);
-        passwordHandler.setNext(roleHandler);
+            if(staff != null) {
+             Dashboard dashboard = new Dashboard();
+             dashboard.setVisible(true);
+             this.setVisible(false);
 
-        if (usernameHandler.handle(staff, password)) {
-            JOptionPane.showMessageDialog(this, "Login Successful! Welcome, " + staff.getUsername());
-            Dashboard dashboard = new Dashboard();
-            dashboard.setVisible(true);
-            this.dispose();
-
-        } else {
-            JOptionPane.showMessageDialog(this, "Login Failed!");
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid Username or Password");
+            }
+        } finally {
+            session.close();
         }
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+
+
+    }
+    //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
