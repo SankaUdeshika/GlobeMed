@@ -23,9 +23,9 @@ public class Medication {
     @Column(nullable = false)
     private Integer stock;
 
-    // One medication can appear in many prescriptions
-    @OneToMany(mappedBy = "medication", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Prescription> prescriptions = new ArrayList<>();
+    // Many medications can belong to many prescriptions
+    @ManyToMany(mappedBy = "medications", fetch = FetchType.LAZY)
+    private Set<Prescription> prescriptions = new HashSet<>();
 
     // Constructors
     public Medication() {}
@@ -53,17 +53,17 @@ public class Medication {
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) { this.stock = stock; }
 
-    public List<Prescription> getPrescriptions() { return prescriptions; }
-    public void setPrescriptions(List<Prescription> prescriptions) { this.prescriptions = prescriptions; }
+    public Set<Prescription> getPrescriptions() { return prescriptions; }
+    public void setPrescriptions(Set<Prescription> prescriptions) { this.prescriptions = prescriptions; }
 
     // Utility methods
     public void addPrescription(Prescription prescription) {
         prescriptions.add(prescription);
-        prescription.setMedication(this);
+        prescription.getMedications().add(this);
     }
 
     public void removePrescription(Prescription prescription) {
         prescriptions.remove(prescription);
-        prescription.setMedication(null);
+        prescription.getMedications().remove(this);
     }
 }
