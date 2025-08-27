@@ -1,4 +1,5 @@
 package com.jiat.globemed.util;
+import com.jiat.globemed.model.Staff;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -11,6 +12,7 @@ public class HibernateUtil {
         try {
             Configuration cfg = new Configuration();
             cfg.configure("hibernate.cfg.xml"); // reads from resources
+            cfg.addAnnotatedClass(Staff.class); // must include this
             // optionally register annotated classes:
             // cfg.addAnnotatedClass(com.yourorg.globemed.model.Patient.class);
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()

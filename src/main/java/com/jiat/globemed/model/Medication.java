@@ -1,11 +1,13 @@
 package com.jiat.globemed.model;
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Table(name = "medications")
-public class Medication {
+public class Medication implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,6 +4,21 @@
  */
 package com.jiat.globemed.gui;
 
+import com.jiat.globemed.model.*;
+
+import java.text.SimpleDateFormat;
+
+import com.jiat.globemed.service.LoginHandler;
+import com.jiat.globemed.service.PasswordHandler;
+import com.jiat.globemed.service.RoleHandler;
+import com.jiat.globemed.service.UsernameHandler;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
+import javax.swing.*;
+
 /**
  *
  * @author sanka
@@ -44,6 +59,11 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setText("Password");
 
         jButton1.setText("Login");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Login");
 
@@ -85,6 +105,39 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+
+
+
+        String txtUsername = jTextField1.getText();
+        String txtPassword = jPasswordField1.getText();
+
+
+        Staff staff = new Staff();
+        staff.setUsername(txtUsername);
+        String password = txtPassword;
+
+        // Setup Chain of Responsibility
+        LoginHandler usernameHandler = new UsernameHandler();
+        LoginHandler passwordHandler = new PasswordHandler();
+        LoginHandler roleHandler = new RoleHandler();
+
+        usernameHandler.setNext(passwordHandler);
+        passwordHandler.setNext(roleHandler);
+
+        if (usernameHandler.handle(staff, password)) {
+            JOptionPane.showMessageDialog(this, "Login Successful! Welcome, " + staff.getUsername());
+            Dashboard dashboard = new Dashboard();
+            dashboard.setVisible(true);
+            this.dispose();
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Login Failed!");
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
