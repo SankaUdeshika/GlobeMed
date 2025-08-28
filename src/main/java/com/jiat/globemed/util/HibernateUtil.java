@@ -1,7 +1,5 @@
 package com.jiat.globemed.util;
-import com.jiat.globemed.model.Patient;
-import com.jiat.globemed.model.Staff;
-import com.jiat.globemed.model.TreatmentPlan;
+import com.jiat.globemed.model.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -17,6 +15,11 @@ public class HibernateUtil {
             cfg.addAnnotatedClass(Staff.class);
             cfg.addAnnotatedClass(Patient.class);// must include this
             cfg.addAnnotatedClass(TreatmentPlan.class);
+            cfg.addAnnotatedClass(Appointment.class);
+//            cfg.addAnnotatedClass(InsuranceClaim.class);
+//            cfg.addAnnotatedClass(MedicalReport.class);
+//            cfg.addAnnotatedClass(Medication.class);
+//            cfg.addAnnotatedClass(Prescription.class);
 
             // optionally register annotated classes:
             // cfg.addAnnotatedClass(com.yourorg.globemed.model.Patient.class);

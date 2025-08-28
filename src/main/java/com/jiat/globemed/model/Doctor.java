@@ -59,10 +59,10 @@ public class Doctor implements Serializable {
     public void setSchedule(List<Appointment> schedule) { this.schedule = schedule; }
 
     // Utility methods
-    public void addAppointment(Appointment appointment) {
-        schedule.add(appointment);
-        appointment.setDoctor(this);
-    }
+//    public void addAppointment(Appointment appointment) {
+//        schedule.add(appointment);
+//        appointment.setDoctor(this);
+//    }
 
     public void removeAppointment(Appointment appointment) {
         schedule.remove(appointment);
