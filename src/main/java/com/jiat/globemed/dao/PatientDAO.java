@@ -8,16 +8,21 @@ import org.hibernate.Transaction;
 import java.util.List;
 
 public class PatientDAO {
-    public Patient save(Patient p) {
+    public void savePatient(Patient patient) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
-            session.persist(p);
+            session.save(patient);
             tx.commit();
-            return p;
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            throw e;
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception ex) {
+                    System.err.println("Rollback failed: " + ex.getMessage());
+                }
+            }
+            e.printStackTrace();
         }
     }
 

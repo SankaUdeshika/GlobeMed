@@ -4,17 +4,32 @@
  */
 package com.jiat.globemed.gui;
 
+import com.jiat.globemed.model.Staff;
+
 /**
  *
  * @author sanka
  */
 public class Dashboard extends javax.swing.JFrame {
 
+    public static String LoggedUserName = null;
+    public static Long LoggedUserID = null;
+    public static Staff.Role LoggedUserRole = null;
+
     /**
      * Creates new form Dashboard
      */
     public Dashboard() {
         initComponents();
+    }
+
+    public Dashboard(String LoggedUserName, Long LoggedUserID, Staff.Role LoggedUserRole) {
+        initComponents();
+        this.LoggedUserName = LoggedUserName;
+        this.LoggedUserID = LoggedUserID;
+        this.LoggedUserRole = LoggedUserRole;
+        jLabel1.setText(LoggedUserName);
+
     }
 
     /**
@@ -33,6 +48,7 @@ public class Dashboard extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,6 +76,8 @@ public class Dashboard extends javax.swing.JFrame {
 
         jButton7.setText("Audit Log");
 
+        jLabel1.setText("Welcome");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -75,11 +93,17 @@ public class Dashboard extends javax.swing.JFrame {
                     .addComponent(jButton2)
                     .addComponent(jButton1))
                 .addContainerGap(614, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(188, 188, 188))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(132, 132, 132)
+                .addGap(25, 25, 25)
+                .addComponent(jLabel1)
+                .addGap(91, 91, 91)
                 .addComponent(jButton1)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2)
@@ -100,7 +124,10 @@ public class Dashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        // Go Patient Record Management
+        PatientRecordManagement patientRecordManagement = new PatientRecordManagement();
+        patientRecordManagement.setVisible(true);
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -150,5 +177,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

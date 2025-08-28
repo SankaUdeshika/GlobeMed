@@ -18,10 +18,10 @@ public class TreatmentPlan implements Serializable {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    // Many treatment plans can be assigned to one doctor
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false)
-    private Doctor doctor;
+    private Staff doctor;
 
     @Column(length = 500, nullable = false)
     private String description;
@@ -33,10 +33,12 @@ public class TreatmentPlan implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
+
+
     // Constructors
     public TreatmentPlan() {}
 
-    public TreatmentPlan(Patient patient, Doctor doctor, String description, Date startDate, Date endDate) {
+    public TreatmentPlan(Patient patient, Staff doctor, String description, Date startDate, Date endDate) {
         this.patient = patient;
         this.doctor = doctor;
         this.description = description;
@@ -51,8 +53,8 @@ public class TreatmentPlan implements Serializable {
     public Patient getPatient() { return patient; }
     public void setPatient(Patient patient) { this.patient = patient; }
 
-    public Doctor getDoctor() { return doctor; }
-    public void setDoctor(Doctor doctor) { this.doctor = doctor; }
+    public Staff getDoctor() { return doctor; }
+    public void setDoctor(Staff doctor) { this.doctor = doctor; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
@@ -62,4 +64,6 @@ public class TreatmentPlan implements Serializable {
 
     public Date getEndDate() { return endDate; }
     public void setEndDate(Date endDate) { this.endDate = endDate; }
+
+
 }

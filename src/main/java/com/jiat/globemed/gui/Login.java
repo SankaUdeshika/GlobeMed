@@ -120,10 +120,9 @@ public class Login extends javax.swing.JFrame {
             Staff staff = query.uniqueResult();
 
             if(staff != null) {
-             Dashboard dashboard = new Dashboard();
+             Dashboard dashboard = new Dashboard(staff.getName(),staff.getId(),staff.getRole());
              dashboard.setVisible(true);
              this.setVisible(false);
-
             }else{
                 JOptionPane.showMessageDialog(null, "Invalid Username or Password");
             }
