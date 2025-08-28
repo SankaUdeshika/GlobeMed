@@ -59,7 +59,7 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Appointments");
+        jButton2.setText("Appointment Scheduling ");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -84,14 +84,14 @@ public class Dashboard extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(95, 95, 95)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton7)
                     .addComponent(jButton6)
                     .addComponent(jButton5)
                     .addComponent(jButton4)
                     .addComponent(jButton3)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(614, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -125,13 +125,16 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // Go Patient Record Management
-        PatientRecordManagement patientRecordManagement = new PatientRecordManagement();
-        patientRecordManagement.setVisible(true);
+        PatientRecordDashboard patientRecordDashboard = new PatientRecordDashboard();
+        patientRecordDashboard.setVisible(true);
+
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        AppointmentSchedule aps = new AppointmentSchedule();
+        aps.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

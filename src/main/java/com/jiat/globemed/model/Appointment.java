@@ -22,7 +22,7 @@ public class Appointment implements Serializable {
     // Many appointments can belong to one doctor
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false)
-    private Doctor doctor;
+    private Staff doctor;
 
     @Column(nullable = false)
     private LocalDate date;
@@ -44,7 +44,7 @@ public class Appointment implements Serializable {
     // Constructors
     public Appointment() {}
 
-    public Appointment(Patient patient, Doctor doctor, LocalDate date, LocalTime time, Status status) {
+    public Appointment(Patient patient, Staff doctor, LocalDate date, LocalTime time, Status status) {
         this.patient = patient;
         this.doctor = doctor;
         this.date = date;
@@ -59,8 +59,8 @@ public class Appointment implements Serializable {
     public Patient getPatient() { return patient; }
     public void setPatient(Patient patient) { this.patient = patient; }
 
-    public Doctor getDoctor() { return doctor; }
-    public void setDoctor(Doctor doctor) { this.doctor = doctor; }
+    public Staff getDoctor() { return doctor; }
+    public void setDoctor(Staff doctor) { this.doctor = doctor; }
 
     public LocalDate getDate() { return date; }
     public void setDate(LocalDate date) { this.date = date; }

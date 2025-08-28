@@ -26,9 +26,32 @@ public class PatientDAO {
         }
     }
 
+    public void updatePatient(Patient patient){
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+            session.merge(patient);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception ex) {
+                    System.err.println("Rollback failed: " + ex.getMessage());
+                }
+            }
+            e.printStackTrace();
+        }
+    }
+
     public Patient findById(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Patient.class, id);
+            Patient patient = session.get(Patient.class, id);
+            if(patient != null) {
+                return patient;
+            }else{
+                return null;
+            }
         }
     }
 

@@ -48,9 +48,9 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setText("jTextField1");
+        jTextField1.setText("sanka");
 
-        jPasswordField1.setText("jPasswordField1");
+        jPasswordField1.setText("1234");
 
         jLabel1.setText("User Name");
 
@@ -133,7 +133,7 @@ public class Login extends javax.swing.JFrame {
 
 
     }
-    //GEN-LAST:event_jButton1ActionPerformed
+//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
