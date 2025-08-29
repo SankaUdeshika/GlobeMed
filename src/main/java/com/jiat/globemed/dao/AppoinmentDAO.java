@@ -86,4 +86,13 @@ public class AppoinmentDAO {
             tx.commit();
         }
     }
+    public void cancelAppoinment(Appointment appointment) {
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+            appointment.setStatus(Appointment.Status.CANCELLED);
+            session.merge(appointment);
+            tx.commit();
+        }
+    }
 }

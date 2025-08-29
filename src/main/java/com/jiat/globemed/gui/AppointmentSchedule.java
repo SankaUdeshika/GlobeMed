@@ -260,13 +260,38 @@ public class AppointmentSchedule extends javax.swing.JFrame {
 
         if (isSchedule) {
             System.out.println("Appointments scheduled ✅");
+            JOptionPane.showMessageDialog(this, "Appointments scheduled ✅ ", "Success", JOptionPane.OK_OPTION);
         } else {
-            System.out.println("Appointments not scheduled ❌");
+            System.out.println("Appointments not scheduled ❌ ");
+            JOptionPane.showMessageDialog(this, "Appointments not scheduled ❌ ", "Faild", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        // Canceled Appoinment
+
+        int selectROw = jTable2.getSelectedRow();
+        if (selectROw == -1) {
+            JOptionPane.showMessageDialog(this, "Please Select Row frist");
+        } else {
+
+            String apploinmentID = String.valueOf(jTable2.getValueAt(selectROw, 1));
+            Appointment appoinment = new AppoinmentDAO().findById(Long.parseLong(apploinmentID));
+            AppoinmentSchedulerMain appoinmentSchedulerMain = new AppoinmentSchedulerMain();
+            boolean isSchedule = appoinmentSchedulerMain.cancelAppointment(appoinment);
+
+            if (isSchedule) {
+                System.out.println("Appointments Canceld");
+                JOptionPane.showMessageDialog(this, "Appointments Canceld");
+                refresh();
+            } else {
+                System.out.println("Appointments not Canceld");
+                JOptionPane.showMessageDialog(this, "Appointments Canceld");
+                refresh();
+            }
+        }
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

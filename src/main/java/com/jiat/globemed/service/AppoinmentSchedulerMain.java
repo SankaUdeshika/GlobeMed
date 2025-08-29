@@ -17,6 +17,7 @@ interface AppointmentMediator {
 
     boolean updateAppointment(Patient patient, Staff doctor, LocalDate date, LocalTime time);
 
+    boolean updateAppointment(Appointment appointment);
 }
 
 public class AppoinmentSchedulerMain {
@@ -31,6 +32,12 @@ public class AppoinmentSchedulerMain {
     public boolean updateAppointment(Patient patient, Staff doctor, LocalDate date, LocalTime time) {
         AppointmentMediator scheduler = new AppointmentScheduler();
         boolean isSchedule = scheduler.updateAppointment(patient, doctor, date, time);
+        return isSchedule;
+    }
+
+    public boolean cancelAppointment(Appointment appointment) {
+        AppointmentMediator scheduler = new AppointmentScheduler();
+        boolean isSchedule = scheduler.updateAppointment(appointment);
         return isSchedule;
     }
 }
@@ -62,7 +69,6 @@ class AppointmentScheduler implements AppointmentMediator {
     public boolean updateAppointment(Patient patient, Staff doctor, LocalDate date, LocalTime time) {
         // check if doctor is free at this date/time
         for (Appointment appt : appointments) {
-        
 
             if (appt.getDoctorId().equals(doctor.getId()) && appt.getDate().equals(date) && appt.getTime().equals(time)) {
                 System.out.println("Doctor not available at this time!");
@@ -74,6 +80,14 @@ class AppointmentScheduler implements AppointmentMediator {
         appointments.add(newAppt);
         new AppoinmentDAO().updateAppoinment(newAppt);
         System.out.println("Appointment Updated for " + patient.getName() + " with Dr. " + doctor.getName() + " at " + date + " " + time);
+        return true;
+    }
+
+    @Override
+    public boolean updateAppointment(Appointment appointment) {
+        // check if doctor is free at this date/time
+        new AppoinmentDAO().cancelAppoinment(appointment);
+        System.out.println("Appointment Canceled");
         return true;
     }
 
