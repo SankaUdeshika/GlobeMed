@@ -71,13 +71,13 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
             for (Billing billing : BillList) {
                 System.out.println(billing.getAmount() + "sanka snaka");
                 Vector row = new Vector();
-                row.add(billing.getId());
+                row.add(String.valueOf(billing.getId()));
                 row.add(billing.getPatient().getName());
-                row.add(billing.getAmount());
-                row.add(billing.getDate());
-                row.add(billing.getStatus());
-                row.add(billing.getInsuranceClaim());
-                row.add(billing.getId());
+                row.add(String.valueOf(billing.getAmount()));
+                row.add(String.valueOf(billing.getDate()));
+                row.add(String.valueOf(billing.getStatus()));
+                row.add(String.valueOf(billing.getInsuranceClaim()));
+                row.add(String.valueOf(billing.getId()));
 
                 // safe now
                 defaultTableModel.addRow(row);
@@ -101,9 +101,6 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jCheckBox1 = new javax.swing.JCheckBox();
         jButton5 = new javax.swing.JButton();
@@ -147,18 +144,12 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        jButton1.setText("GenerateBill");
+        jButton1.setText("Financial Report");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-
-        jButton2.setText("btnSubmitClaim");
-
-        jButton3.setText("btnApprove");
-
-        jButton4.setText("btnReject");
 
         jCheckBox1.setText("Add Insuarance Claim");
 
@@ -174,7 +165,7 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Patient", "Amount", "Date", "Status", "Insurance     "
+                "ID", "Patient", "Amount", "Date", "Status", "Insurance"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -218,17 +209,13 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
                                 .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
                                 .addComponent(jTextField2))
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(jButton1)
                 .addGap(38, 38, 38))
         );
         layout.setVerticalGroup(
@@ -255,12 +242,7 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4)))
+                        .addGap(108, 108, 108)))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
@@ -322,26 +304,31 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
         // TODO add your handling code here:
-        if (evt.getClickCount() == 2 && jTable2.getSelectedRow() != -1) {
-            String BillID = jTable2.getValueAt(jTable2.getSelectedRow(), 0).toString();
-            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-
-                billing = new BillingDAO().getBilling(Long.parseLong(BillID));
-                System.out.println(billing.getId());
-            }
-
-        }
+//        if (evt.getClickCount() == 2 && jTable2.getSelectedRow() != -1) {
+//            String BillID = jTable2.getValueAt(jTable2.getSelectedRow(), 0).toString();
+//            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+//
+//                billing = new BillingDAO().getBilling(Long.parseLong(BillID));
+//                System.out.println(billing.getId());
+//            }
+//
+//        }
     }//GEN-LAST:event_jTable2MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
-        if (billing != null) {
-            ReportGenerate reportGenerate = new ReportGenerate();
-            reportGenerate.generateBilling(billing);
-        } else {
-            JOptionPane.showMessageDialog(this, "Please Select a Bill from second Table");
+        DefaultTableModel defaultTableModel = (DefaultTableModel) jTable2.getModel();
+        ReportGenerate reportGenerate = new ReportGenerate();
+
+        int result = JOptionPane.showConfirmDialog(null, "Do you want to continue?", "Confirm", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            reportGenerate.generateBilling(defaultTableModel);
+            System.out.println("Generate bills");
+        } else if (result == JOptionPane.NO_OPTION) {
+            System.out.println("User selected NO");
         }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -381,9 +368,6 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;

@@ -6,6 +6,14 @@ package com.jiat.globemed.service;
 
 import com.jiat.globemed.model.Appointment;
 import com.jiat.globemed.model.Billing;
+import com.jiat.globemed.model.Reports;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.view.JasperViewer;
+
+import javax.swing.table.DefaultTableModel;
+import java.util.HashMap;
 
 /**
  *
@@ -19,9 +27,9 @@ public class ReportGenerate {
         appointmentSummary.accept(reportGeneration);
     }
 
-    public void generateBilling(Billing billing) {
+    public void generateBilling(DefaultTableModel tableModel) {
         Visitors reportGeneration = new ReportGenerating();
-        FinancialSummary financialSummary = new FinancialSummary(billing);
+        FinancialSummary financialSummary = new FinancialSummary(tableModel);
         financialSummary.accept(reportGeneration);
     }
 }
@@ -48,8 +56,13 @@ class ReportGenerating implements Visitors {
 
     @Override
     public void visit(FinancialSummary financialSummary) {
-        System.out.println("Billing Report: ID = " 
-                + financialSummary.getBilling().getId());
+        try {
+            HashMap<String, Object> reportmap = new HashMap<>();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(Reports.class.getResourceAsStream("/reports/GlobmedBilling.jasper"), reportmap, new JRTableModelDataSource(financialSummary.getBilling()));
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 
@@ -75,14 +88,14 @@ class AppointmentSummary implements ClientElement {
 // Concrete Element - Billing
 class FinancialSummary implements ClientElement {
 
-    private final Billing billing;
+    private final DefaultTableModel tableModel;
 
-    public FinancialSummary(Billing billing) {
-        this.billing = billing;
+    public FinancialSummary( DefaultTableModel tableModel) {
+        this.tableModel = tableModel;
     }
 
-    public Billing getBilling() {
-        return billing;
+    public DefaultTableModel getBilling() {
+        return tableModel;
     }
 
     @Override
