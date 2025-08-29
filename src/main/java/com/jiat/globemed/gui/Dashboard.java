@@ -66,7 +66,12 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Billing");
+        jButton3.setText("Billing and Insurance Claims");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Staff");
 
@@ -136,6 +141,12 @@ public class Dashboard extends javax.swing.JFrame {
         AppointmentSchedule aps = new AppointmentSchedule();
         aps.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        Billingn_Isurance_Claim billingn_Isurance_Claim = new Billingn_Isurance_Claim();
+        billingn_Isurance_Claim.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -16,7 +16,8 @@ public class HibernateUtil {
             cfg.addAnnotatedClass(Patient.class);// must include this
             cfg.addAnnotatedClass(TreatmentPlan.class);
             cfg.addAnnotatedClass(Appointment.class);
-//            cfg.addAnnotatedClass(InsuranceClaim.class);
+            cfg.addAnnotatedClass(Billing.class);
+            cfg.addAnnotatedClass(InsuranceClaim.class);
 //            cfg.addAnnotatedClass(MedicalReport.class);
 //            cfg.addAnnotatedClass(Medication.class);
 //            cfg.addAnnotatedClass(Prescription.class);

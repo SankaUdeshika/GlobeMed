@@ -32,7 +32,7 @@ public class InsuranceClaim implements Serializable {
         SUBMITTED,
         APPROVED,
         REJECTED,
-        PROCESSING
+        PROCESSING,
     }
 
     // Constructors

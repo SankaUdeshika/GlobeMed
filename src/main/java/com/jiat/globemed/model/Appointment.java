@@ -15,12 +15,13 @@ public class Appointment implements Serializable {
     private Long id;
 
     // Many appointments can belong to one patient
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
     // Many appointments can belong to one doctor
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id", nullable = false)
     private Staff doctor;
 
