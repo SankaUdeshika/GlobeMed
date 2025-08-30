@@ -42,11 +42,12 @@ public class Billing  implements Serializable {
     // Constructors
     public Billing() {}
 
-    public Billing(Patient patient, Double amount, LocalDate date, Status status) {
+    public Billing(Patient patient, Double amount, LocalDate date, Status status, InsuranceClaim insuranceClaim) {
         this.patient = patient;
         this.amount = amount;
         this.date = date;
         this.status = status;
+        this.insuranceClaim = insuranceClaim;
     }
 
     // Getters & Setters

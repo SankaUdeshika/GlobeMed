@@ -1,60 +1,98 @@
 package com.jiat.globemed.service;
 
+import com.jiat.globemed.dao.BillingDAO;
 import com.jiat.globemed.model.Billing;
 import com.jiat.globemed.model.InsuranceClaim;
 import com.jiat.globemed.model.Patient;
+import com.jiat.globemed.util.HibernateUtil;
 
 import java.time.LocalDate;
+import java.util.Date;
+import org.hibernate.Session;
 
 public class BillingManagementService {
 
-    public Billing createBilling(Patient patient, double amount, LocalDate date, Billing.Status status) {
-        return new Billing(patient, amount, date, status);
-    }
-    public void addInsuranceClaim(Billing billing, String provider, String policyNumber) {
-        InsuranceClaim claim = new InsuranceClaim(billing, provider, policyNumber, InsuranceClaim.ClaimStatus.SUBMITTED);
-        billing.setInsuranceClaim(claim);
+    private Claim adminHandler;
+    private Claim doctorHandler;
 
-        AdminHandler adminHandler = new AdminHandler();
-        DoctorHandler doctorHandler = new DoctorHandler();
+    public BillingManagementService() {
+        adminHandler = new AdminHandler();
+        doctorHandler = new DoctorHandler();
         adminHandler.setNextHandler(doctorHandler);
-
     }
+
+    //Direct Billing
+    public Billing createBilling(int patientId, double amount, LocalDate date, Billing.Status status) {
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            Patient patient = session.get(Patient.class, patientId);
+            Billing billing = new Billing(patient, amount, date, status.PAID, null);
+            return billing;
+        }
+    }
+
     public void payBilling(Billing billing) {
         billing.setStatus(Billing.Status.PAID);
+        System.out.println("Billing paid for patient: " + billing.getPatient().getName());
+        new BillingDAO().saveBilling(billing);
     }
+
+    //Direct Billing
+    public void adminSubmit(Billing billing) {
+        adminHandler.handleClaim(billing);
+    }
+
+    public void doctorApprove(Billing billing) {
+        doctorHandler.handleClaim(billing);
+    }
+
 }
 
- abstract class ClaimHandler {
-    protected ClaimHandler nextHandler;
+abstract class Claim {
 
-    public void setNextHandler(ClaimHandler handler) {
+    protected Claim nextHandler;
+
+    public void setNextHandler(Claim handler) {
         this.nextHandler = handler;
     }
-    public abstract void handleClaim(InsuranceClaim claim);
+
+    public abstract void handleClaim(Billing bill);
 }
 
+class AdminHandler extends Claim {
 
-
- class AdminHandler extends ClaimHandler {
     @Override
-    public void handleClaim(InsuranceClaim claim) {
-        if (claim.getClaimStatus() == InsuranceClaim.ClaimStatus.SUBMITTED) {
-            System.out.println("Admin approves basic validation");
-            claim.setClaimStatus(InsuranceClaim.ClaimStatus.PROCESSING);
+    public void handleClaim(Billing bill) {
+        if (bill.getInsuranceClaim() != null
+                && bill.getInsuranceClaim().getClaimStatus() == InsuranceClaim.ClaimStatus.SUBMITTED) {
+
+            bill.getInsuranceClaim().setClaimStatus(InsuranceClaim.ClaimStatus.PROCESSING);
+
+            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                session.beginTransaction();
+                session.merge(bill);
+                session.getTransaction().commit();
+            }
+
         }
-        if (nextHandler != null) nextHandler.handleClaim(claim);
+
     }
 }
 
- class DoctorHandler extends ClaimHandler {
+class DoctorHandler extends Claim {
+
     @Override
-    public void handleClaim(InsuranceClaim claim) {
-        if (claim.getClaimStatus() == InsuranceClaim.ClaimStatus.PROCESSING) {
-            System.out.println("Insurance Officer reviews claim");
-            // Approve or Reject randomly for demo
-            claim.setClaimStatus(InsuranceClaim.ClaimStatus.APPROVED);
+    public void handleClaim(Billing bill) {
+        if (bill.getInsuranceClaim().getClaimStatus() == InsuranceClaim.ClaimStatus.PROCESSING) {
+            bill.getInsuranceClaim().setClaimStatus(InsuranceClaim.ClaimStatus.APPROVED);
+
+            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                session.beginTransaction();
+                session.merge(bill);
+                session.getTransaction().commit();
+            }
+        } else {
         }
-        if (nextHandler != null) nextHandler.handleClaim(claim);
     }
 }

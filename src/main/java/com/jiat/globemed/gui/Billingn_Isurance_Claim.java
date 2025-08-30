@@ -6,6 +6,7 @@ package com.jiat.globemed.gui;
 
 import com.jiat.globemed.dao.AppoinmentDAO;
 import com.jiat.globemed.dao.BillingDAO;
+import com.jiat.globemed.dao.PatientDAO;
 import com.jiat.globemed.dao.StafDAO;
 import com.jiat.globemed.model.*;
 import com.jiat.globemed.service.BillingManagementService;
@@ -44,13 +45,13 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
 
     public void loadAppoinmentTable() {
         try {
-            List<Appointment> appoinmentList = new AppoinmentDAO().getCompletedAllAppointments();
+            List<Appointment> appoinmentList = new AppoinmentDAO().getAllAppointments();
             DefaultTableModel defaultTableModel = (DefaultTableModel) jTable1.getModel();
             defaultTableModel.setRowCount(0);
 
             for (Appointment appointment : appoinmentList) {
                 Vector row = new Vector();
-                row.add(appointment.getPatient().getName());
+                row.add(appointment.getPatient().getId());
                 row.add(appointment.getId());
                 row.add(appointment.getStatus());
                 // safe now
@@ -267,19 +268,26 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
                     Appointment appointmentObject = new AppoinmentDAO().findById(Long.parseLong(AppoinmentID));
 
                     BillingManagementService billingManagementService = new BillingManagementService();
-                    Billing billing = billingManagementService.createBilling(appointmentObject.getPatient(), Double.parseDouble(amount), LocalDate.now(), Billing.Status.PENDING);
-                    new BillingDAO().saveBilling(billing);
                     UUID uuid = UUID.randomUUID();
                     String policyNumber = String.valueOf(uuid);
-                    billingManagementService.addInsuranceClaim(billing, "Insuerance", policyNumber);
+                    Patient patient =  new PatientDAO().findById(Long.parseLong(String.valueOf(jTable1.getValueAt(selectedRow,0))));
+                    billing = new Billing(patient,Double.parseDouble(amount), java.time.LocalDate.now(),Billing.Status.PENDING,null);
+
+                    InsuranceClaim insuranceClaim = new InsuranceClaim(billing, "Insuerance", policyNumber, InsuranceClaim.ClaimStatus.SUBMITTED);
+
+                    billing.setInsuranceClaim(insuranceClaim);
+
+                    new BillingDAO().saveBilling(billing);
+                    billingManagementService.adminSubmit(billing);
                     refresh();
                 } else {
                     String AppoinmentID = String.valueOf(jTable1.getValueAt(selectedRow, 1));
                     Appointment appointmentObject = new AppoinmentDAO().findById(Long.parseLong(AppoinmentID));
 
                     BillingManagementService billingManagementService = new BillingManagementService();
-                    Billing billing = billingManagementService.createBilling(appointmentObject.getPatient(), Double.parseDouble(amount), LocalDate.now(), Billing.Status.PENDING);
-                    new BillingDAO().saveBilling(billing);
+                    int Pid = Integer.parseInt(String.valueOf( jTable1.getValueAt(selectedRow,0)));
+                    Billing billingObject = billingManagementService.createBilling(Pid, Double.parseDouble(amount),LocalDate.now(), Billing.Status.PAID);
+                    billingManagementService.payBilling(billingObject);
                     refresh();
                 }
 
@@ -298,7 +306,7 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Please select a row from the table");
             }
-        }
+        }   
 
     }//GEN-LAST:event_jTable1MouseClicked
 
