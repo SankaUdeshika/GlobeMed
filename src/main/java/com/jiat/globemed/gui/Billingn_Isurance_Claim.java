@@ -52,6 +52,7 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
             for (Appointment appointment : appoinmentList) {
                 Vector row = new Vector();
                 row.add(appointment.getPatient().getId());
+                row.add(appointment.getPatient().getName());
                 row.add(appointment.getId());
                 row.add(appointment.getStatus());
                 // safe now
@@ -77,8 +78,14 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
                 row.add(String.valueOf(billing.getAmount()));
                 row.add(String.valueOf(billing.getDate()));
                 row.add(String.valueOf(billing.getStatus()));
-                row.add(String.valueOf(billing.getInsuranceClaim()));
-                row.add(String.valueOf(billing.getId()));
+                if(billing.getInsuranceClaim() != null){
+                    row.add(String.valueOf(billing.getInsuranceClaim().getId()));
+                    row.add(String.valueOf(billing.getInsuranceClaim().getClaimStatus()));
+                }else {
+                    row.add(String.valueOf("No Insurance Claim"));
+                    row.add(String.valueOf("-"));
+                }
+
 
                 // safe now
                 defaultTableModel.addRow(row);
@@ -109,6 +116,7 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
         jTable2 = new javax.swing.JTable();
         jTextField2 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -116,17 +124,17 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Patient", "Appoinment ID", "Status "
+                "Patient ID", "Patient Name", "Appoinment ID", "Status "
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -143,6 +151,7 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
             jTable1.getColumnModel().getColumn(1).setResizable(false);
             jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
         }
 
         jButton1.setText("Financial Report");
@@ -163,14 +172,14 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Patient", "Amount", "Date", "Status", "Insurance"
+                "ID", "Patient", "Amount", "Date", "Status", "Insurance", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -190,9 +199,17 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
             jTable2.getColumnModel().getColumn(3).setResizable(false);
             jTable2.getColumnModel().getColumn(4).setResizable(false);
             jTable2.getColumnModel().getColumn(5).setResizable(false);
+            jTable2.getColumnModel().getColumn(6).setResizable(false);
         }
 
         jLabel2.setText("Amount");
+
+        jButton2.setText("Back");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -211,13 +228,18 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
                                 .addComponent(jTextField2))
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(172, 172, 172))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(38, 38, 38))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1)))
+                        .addGap(123, 123, 123))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,12 +261,16 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jButton5)))
                 .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)
-                        .addGap(108, 108, 108)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addGap(16, 16, 16))))
         );
 
         pack();
@@ -264,14 +290,14 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
             } else {
 
                 if (jCheckBox1.isSelected()) {
-                    String AppoinmentID = String.valueOf(jTable1.getValueAt(selectedRow, 1));
+                    String AppoinmentID = String.valueOf(jTable1.getValueAt(selectedRow, 2));
                     Appointment appointmentObject = new AppoinmentDAO().findById(Long.parseLong(AppoinmentID));
 
                     BillingManagementService billingManagementService = new BillingManagementService();
                     UUID uuid = UUID.randomUUID();
                     String policyNumber = String.valueOf(uuid);
-                    Patient patient =  new PatientDAO().findById(Long.parseLong(String.valueOf(jTable1.getValueAt(selectedRow,0))));
-                    billing = new Billing(patient,Double.parseDouble(amount), java.time.LocalDate.now(),Billing.Status.PENDING,null);
+                    Patient patient = new PatientDAO().findById(Long.parseLong(String.valueOf(jTable1.getValueAt(selectedRow, 0))));
+                    billing = new Billing(patient, Double.parseDouble(amount), java.time.LocalDate.now(), Billing.Status.PENDING, null);
 
                     InsuranceClaim insuranceClaim = new InsuranceClaim(billing, "Insuerance", policyNumber, InsuranceClaim.ClaimStatus.SUBMITTED);
 
@@ -281,12 +307,12 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
                     billingManagementService.adminSubmit(billing);
                     refresh();
                 } else {
-                    String AppoinmentID = String.valueOf(jTable1.getValueAt(selectedRow, 1));
+                    String AppoinmentID = String.valueOf(jTable1.getValueAt(selectedRow, 2));
                     Appointment appointmentObject = new AppoinmentDAO().findById(Long.parseLong(AppoinmentID));
 
                     BillingManagementService billingManagementService = new BillingManagementService();
-                    int Pid = Integer.parseInt(String.valueOf( jTable1.getValueAt(selectedRow,0)));
-                    Billing billingObject = billingManagementService.createBilling(Pid, Double.parseDouble(amount),LocalDate.now(), Billing.Status.PAID);
+                    int Pid = Integer.parseInt(String.valueOf(jTable1.getValueAt(selectedRow, 0)));
+                    Billing billingObject = billingManagementService.createBilling(Pid, Double.parseDouble(amount), LocalDate.now(), Billing.Status.PAID);
                     billingManagementService.payBilling(billingObject);
                     refresh();
                 }
@@ -306,7 +332,7 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Please select a row from the table");
             }
-        }   
+        }
 
     }//GEN-LAST:event_jTable1MouseClicked
 
@@ -338,6 +364,11 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -376,6 +407,7 @@ public class Billingn_Isurance_Claim extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton5;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;

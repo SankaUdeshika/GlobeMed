@@ -1,6 +1,7 @@
 package com.jiat.globemed.dao;
 
 import com.jiat.globemed.model.Patient;
+import com.jiat.globemed.model.TreatmentPlan;
 import com.jiat.globemed.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -13,6 +14,24 @@ public class PatientDAO {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
             session.save(patient);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception ex) {
+                    System.err.println("Rollback failed: " + ex.getMessage());
+                }
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public void savePatientTreatment(TreatmentPlan treatmentPlan) {
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+            session.save(treatmentPlan);
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {

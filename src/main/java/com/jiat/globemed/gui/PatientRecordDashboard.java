@@ -8,7 +8,6 @@ import com.jiat.globemed.dao.PatientDAO;
 import com.jiat.globemed.model.Patient;
 import com.jiat.globemed.service.RoleManagement;
 
-
 import javax.swing.*;
 
 /**
@@ -29,7 +28,7 @@ public class PatientRecordDashboard extends javax.swing.JFrame {
 
     public void AccessRoles() {
         RoleManagement rm = new RoleManagement();
-        rm.RoleManagementProcess(jButton1,jButton2,jButton3);
+        rm.RoleManagementProcess(jButton1, jButton2, jButton3);
     }
 
     /**
@@ -162,9 +161,15 @@ public class PatientRecordDashboard extends javax.swing.JFrame {
         if (PationObject == null) {
             JOptionPane.showMessageDialog(this, "Please select a Patient Record");
         } else {
-            PatientTreatmentPlan patientTreatmentPlan = new PatientTreatmentPlan();
-            patientTreatmentPlan.setVisible(true);
-            this.setVisible(false);
+            Patient patientFindObject = new PatientDAO().findById(Long.parseLong(jLabel3.getText()));
+            if (patientFindObject != null) {
+                PatientTreatmentPlan patientTreatmentPlan = new PatientTreatmentPlan(patientFindObject);
+                patientTreatmentPlan.setVisible(true);
+                this.setVisible(false);
+            } else {
+                JOptionPane.showConfirmDialog(this, "Something Wrong, Please try again later");
+            }
+
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

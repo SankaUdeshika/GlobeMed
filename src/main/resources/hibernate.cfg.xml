@@ -6,7 +6,9 @@
     <session-factory>
         <!-- DB connection -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/globemed?useSSL=false&amp;serverTimezone=UTC</property>
+        <property name="hibernate.connection.url">
+            jdbc:mysql://localhost:3306/globemed?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC
+        </property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">12345678</property>
 
@@ -22,8 +24,5 @@
 
         <!-- JPA/Hibernate settings -->
         <property name="hibernate.current_session_context_class">thread</property>
-
-        <!-- annotate your entities here or use scanning -->
-        <!-- <mapping class="com.yourorg.globemed.model.Patient"/> -->
     </session-factory>
 </hibernate-configuration>

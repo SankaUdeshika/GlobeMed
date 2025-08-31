@@ -261,6 +261,7 @@ public class AppointmentSchedule extends javax.swing.JFrame {
         if (isSchedule) {
             System.out.println("Appointments scheduled ✅");
             JOptionPane.showMessageDialog(this, "Appointments scheduled ✅ ", "Success", JOptionPane.OK_OPTION);
+            refresh();
         } else {
             System.out.println("Appointments not scheduled ❌ ");
             JOptionPane.showMessageDialog(this, "Appointments not scheduled ❌ ", "Faild", JOptionPane.WARNING_MESSAGE);
