@@ -109,32 +109,33 @@ public class Login extends javax.swing.JFrame {
         String txtUsername = jTextField1.getText();
         String txtPassword = jPasswordField1.getText();
 
-
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
-            String hql = "FROM Staff s WHERE s.username = :username AND s.password = :password";
-            Query<Staff> query = session.createQuery(hql, Staff.class);
-            query.setParameter("username", txtUsername);
-            query.setParameter("password", txtPassword);
-
-            Staff staff = query.uniqueResult();
-
-            if(staff != null) {
-             Dashboard dashboard = new Dashboard(staff.getName(),staff.getId(),staff.getRole());
-             dashboard.setVisible(true);
-             this.setVisible(false);
-            }else{
-                JOptionPane.showMessageDialog(null, "Invalid Username or Password");
-            }
-        } finally {
-            session.close();
-        }
-
-
+        com.jiat.globemed.service.Login login = new com.jiat.globemed.service.Login();
+        String text = login.login(txtUsername, txtPassword, this);
+        JOptionPane.showMessageDialog(this, text);
+        Dashboard d = new Dashboard(login.getUser().getName(), login.getUser().getId(), login.getUser().getRole(), login.getRole());
+        d.setVisible(true);
+//        Session session = HibernateUtil.getSessionFactory().openSession();
+//        try {
+//            String hql = "FROM Staff s WHERE s.username = :username AND s.password = :password";
+//            Query<Staff> query = session.createQuery(hql, Staff.class);
+//            query.setParameter("username", txtUsername);
+//            query.setParameter("password", txtPassword);
+//
+//            Staff staff = query.uniqueResult();
+//
+//            if(staff != null) {
+//             Dashboard dashboard = new Dashboard(staff.getName(),staff.getId(),staff.getRole());
+//             dashboard.setVisible(true);
+//             this.setVisible(false);
+//            }else{
+//                JOptionPane.showMessageDialog(null, "Invalid Username or Password");
+//            }
+//        } finally {
+//            session.close();
+//        }
 
     }
 //GEN-LAST:event_jButton1ActionPerformed
-
     /**
      * @param args the command line arguments
      */
