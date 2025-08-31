@@ -7,6 +7,7 @@ package com.jiat.globemed.service;
 import com.jiat.globemed.model.Appointment;
 import com.jiat.globemed.model.Billing;
 import com.jiat.globemed.model.Reports;
+import com.jiat.globemed.model.TreatmentPlan;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
@@ -21,12 +22,14 @@ import java.util.HashMap;
  */
 public class ReportGenerate {
 
-    public void generateAppointment(Appointment appointment) {
+    // Generate Medical Treatment Report
+    public void generateMedicalTreatment(DefaultTableModel tableModel) {
         Visitors reportGeneration = new ReportGenerating();
-        AppointmentSummary appointmentSummary = new AppointmentSummary(appointment);
-        appointmentSummary.accept(reportGeneration);
+        TreatmentSummary treatmentSummary = new TreatmentSummary(tableModel);
+        treatmentSummary.accept(reportGeneration);
     }
 
+    // Generate Billing Report
     public void generateBilling(DefaultTableModel tableModel) {
         Visitors reportGeneration = new ReportGenerating();
         FinancialSummary financialSummary = new FinancialSummary(tableModel);
@@ -36,12 +39,15 @@ public class ReportGenerate {
 
 // Visitor Interface
 interface Visitors {
-    void visit(AppointmentSummary appointmentSummary);
+
+    void visit(TreatmentSummary treatmentSummary);
+
     void visit(FinancialSummary financialSummary);
 }
 
 // Client Element Interface
 interface ClientElement {
+
     void accept(Visitors visitor);
 }
 
@@ -49,16 +55,29 @@ interface ClientElement {
 class ReportGenerating implements Visitors {
 
     @Override
-    public void visit(AppointmentSummary appointmentSummary) {
-        System.out.println("Appointment Report: ID = " 
-                + appointmentSummary.getAppointment().getId());
+    public void visit(TreatmentSummary treatmentSummary) {
+        try {
+            HashMap<String, Object> reportmap = new HashMap<>();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    Reports.class.getResourceAsStream("/reports/PatientTreatments.jasper"),
+                    reportmap,
+                    new JRTableModelDataSource(treatmentSummary.getTreatmentPlan())
+            );
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void visit(FinancialSummary financialSummary) {
         try {
             HashMap<String, Object> reportmap = new HashMap<>();
-            JasperPrint jasperPrint = JasperFillManager.fillReport(Reports.class.getResourceAsStream("/reports/GlobmedBilling.jasper"), reportmap, new JRTableModelDataSource(financialSummary.getBilling()));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    Reports.class.getResourceAsStream("/reports/GlobmedBilling.jasper"),
+                    reportmap,
+                    new JRTableModelDataSource(financialSummary.getBilling())
+            );
             JasperViewer.viewReport(jasperPrint, false);
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,17 +85,17 @@ class ReportGenerating implements Visitors {
     }
 }
 
-// Concrete Element - Appointment
-class AppointmentSummary implements ClientElement {
+// Concrete Element - Treatment
+class TreatmentSummary implements ClientElement {
 
-    private final Appointment appointment;
+    private final DefaultTableModel treatmentTableModel;
 
-    public AppointmentSummary(Appointment appointment) {
-        this.appointment = appointment;
+    public TreatmentSummary(DefaultTableModel treatmentTableModel) {
+        this.treatmentTableModel = treatmentTableModel;
     }
 
-    public Appointment getAppointment() {
-        return appointment;
+    public DefaultTableModel getTreatmentPlan() {
+        return treatmentTableModel;
     }
 
     @Override
@@ -90,7 +109,7 @@ class FinancialSummary implements ClientElement {
 
     private final DefaultTableModel tableModel;
 
-    public FinancialSummary( DefaultTableModel tableModel) {
+    public FinancialSummary(DefaultTableModel tableModel) {
         this.tableModel = tableModel;
     }
 

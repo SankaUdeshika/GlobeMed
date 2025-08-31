@@ -8,6 +8,7 @@ import com.jiat.globemed.dao.StafDAO;
 import com.jiat.globemed.dao.TreatmentDAO;
 import com.jiat.globemed.model.Patient;
 import com.jiat.globemed.model.TreatmentPlan;
+import com.jiat.globemed.service.ReportGenerate;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -47,12 +48,10 @@ public class PatientTreatmentPlan extends javax.swing.JFrame {
 
             for (TreatmentPlan treatment : treatmentPlans) {
                 Vector row = new Vector();
-                row.add(treatment.getId());
-//                row.add(treatment.getDoctor().getName()); // better than object toString()
-                row.add(null); // better than object toString()
+                row.add(String.valueOf(treatment.getId()));
                 row.add(treatment.getDescription());
-                row.add(treatment.getStartDate());
-                row.add(treatment.getEndDate()); // fixed duplicate
+                row.add(String.valueOf(treatment.getStartDate()));
+                row.add(String.valueOf(treatment.getEndDate())); // fixed duplicate
                 defaultTableModel.addRow(row);
             }
             jTable1.setModel(defaultTableModel);
@@ -89,18 +88,18 @@ public class PatientTreatmentPlan extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "TreatmentID", "doctor", "description", "startDate", "endDate"
+                "TreatmentID", "description", "startDate", "endDate"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, true, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -113,7 +112,6 @@ public class PatientTreatmentPlan extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(1).setResizable(false);
             jTable1.getColumnModel().getColumn(2).setResizable(false);
             jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
         }
 
         jButton1.setText("Add");
@@ -124,6 +122,11 @@ public class PatientTreatmentPlan extends javax.swing.JFrame {
         });
 
         jToggleButton1.setText("Delete");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Back");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -133,6 +136,11 @@ public class PatientTreatmentPlan extends javax.swing.JFrame {
         });
 
         jButton3.setText("Print Medical Treatment Report");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -156,25 +164,25 @@ public class PatientTreatmentPlan extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+                            .addComponent(jTextField1)
                             .addComponent(jScrollPane2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton1)
                             .addComponent(jToggleButton1))
-                        .addGap(42, 42, 42))
+                        .addGap(12, 12, 12))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField2))
-                        .addGap(125, 125, 125))
+                        .addGap(95, 95, 95))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE))
                 .addGap(24, 24, 24))
         );
         layout.setVerticalGroup(
@@ -247,6 +255,36 @@ public class PatientTreatmentPlan extends javax.swing.JFrame {
         // Refresh UI
         refresh();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        // TODO add your handling code here:
+
+        int selectRow = jTable1.getSelectedRow();
+        if (selectRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a treatment");
+        } else {
+            String treatmentID = String.valueOf(jTable1.getValueAt(selectRow, 0));
+            TreatmentPlan treatmentPlan = new TreatmentDAO().findById(treatmentID);
+            new TreatmentDAO().deleteTreatment(treatmentPlan);
+
+            JOptionPane.showMessageDialog(this, "Delete Success");
+            refresh();
+        }
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel defaultTableModel = (DefaultTableModel) jTable1.getModel();
+        ReportGenerate reportGenerate = new ReportGenerate();
+
+        int result = JOptionPane.showConfirmDialog(null, "Do you want to continue?", "Confirm", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            reportGenerate.generateMedicalTreatment(defaultTableModel);
+            System.out.println("Generate medical treatment report");
+        } else if (result == JOptionPane.NO_OPTION) {
+            System.out.println("User selected NO");
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

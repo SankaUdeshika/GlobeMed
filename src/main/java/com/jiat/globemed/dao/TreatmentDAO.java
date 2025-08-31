@@ -1,6 +1,7 @@
 package com.jiat.globemed.dao;
 
 import com.jiat.globemed.model.Appointment;
+import com.jiat.globemed.model.Patient;
 import com.jiat.globemed.model.TreatmentPlan;
 import com.jiat.globemed.util.HibernateUtil;
 import org.hibernate.Session;
@@ -30,4 +31,29 @@ public class TreatmentDAO {
             e.printStackTrace();
         }
     }
+
+    public void deleteTreatment(TreatmentPlan treatmentPlan) {
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+            session.delete(treatmentPlan);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+        }
+    }
+
+
+    public TreatmentPlan findById(String treatmentPlanId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            TreatmentPlan treatmentPlan = session.get(TreatmentPlan.class, treatmentPlanId);
+            if(treatmentPlan != null) {
+                return treatmentPlan;
+            }else{
+                return null;
+            }
+        }
+    }
+
 }
