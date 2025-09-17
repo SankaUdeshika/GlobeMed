@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ *
+ * @author sanka
+ */
 public class AppoinmentPermisionManage {
     private static RoleComposite adminRole;
     private static RoleComposite doctorRole;
