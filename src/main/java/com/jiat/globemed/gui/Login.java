@@ -112,7 +112,7 @@ public class Login extends javax.swing.JFrame {
         String txtPassword = jPasswordField1.getText();
 
         com.jiat.globemed.service.Login login = new com.jiat.globemed.service.Login();
-        String text = login.login(txtUsername, txtPassword, this);
+        String text = login.login(txtUsername, txtPassword, this);  
         JOptionPane.showMessageDialog(this, text);
         Dashboard d = new Dashboard(login.getUser().getName(), login.getUser().getId(), login.getUser().getRole(), login.getRole());
         d.setVisible(true);
