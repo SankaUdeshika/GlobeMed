@@ -4,11 +4,16 @@
  */
 package com.jiat.globemed.gui;
 
+import com.jiat.globemed.dao.AppoinmentDAO;
 import com.jiat.globemed.dao.PatientDAO;
+import com.jiat.globemed.model.Appointment;
 import com.jiat.globemed.model.Patient;
 import com.jiat.globemed.service.RoleManagement;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -24,11 +29,38 @@ public class PatientRecordDashboard extends javax.swing.JFrame {
     public PatientRecordDashboard() {
         initComponents();
         AccessRoles();
+        refresh();
     }
 
     public void AccessRoles() {
         RoleManagement rm = new RoleManagement();
         rm.RoleManagementProcess(jButton1, jButton2, jButton3);
+    }
+    
+    
+    public void refresh(){
+       loadPatientTable();
+    }
+
+    public void loadPatientTable() {
+        try {
+            List<Patient> PatientList = new PatientDAO().getAllPatients();
+            DefaultTableModel defaultTableModel = (DefaultTableModel) jTable1.getModel();
+            defaultTableModel.setRowCount(0);
+
+            for (Patient patient : PatientList) {
+                Vector row = new Vector();
+                row.add(patient.getId());
+                row.add(patient.getName());
+                row.add(patient.getPhone());
+                row.add(patient.getEmail());
+                // safe now
+                defaultTableModel.addRow(row);
+            }
+            jTable1.setModel(defaultTableModel);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -110,10 +142,24 @@ public class PatientRecordDashboard extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Name", "Phone", "Name"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
